@@ -34,13 +34,23 @@ public class UserService {
 
     }
 
-    public String loginUser(User user){
-    Authentication authentication = authmanager.authenticate(new UsernamePasswordAuthenticationToken(user.getUsername(), user.getPassword()));
-    if(authentication.isAuthenticated()){
-        return jwtService.generateToken(user.getUsername());
+        public String loginUser(LoginRequest user){
+        try {
+            Authentication authentication = authmanager.authenticate(
+                    new UsernamePasswordAuthenticationToken(user.getUsername(), user.getPassword())
+            );
+
+            if(authentication.isAuthenticated()){
+                return jwtService.generateToken(user.getUsername());
+            } else {
+                System.out.println("Authentication returned false!");
+            }
+        } catch (org.springframework.security.core.AuthenticationException ex) {
+            System.out.println("Authentication failed: " + ex.getClass().getSimpleName() + " - " + ex.getMessage());
+        }
+        return "Authentication failed";
     }
-    return "Unable to Login";
-    }
+
 
 
 

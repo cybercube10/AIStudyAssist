@@ -87,10 +87,7 @@
         </dependency>
 
 
-        <dependency>
-            <groupId>org.springframework.ai</groupId>
-            <artifactId>spring-ai-starter-model-huggingface</artifactId>
-        </dependency>
+
 
         <!-- Testing -->
         <dependency>
@@ -104,13 +101,10 @@
             <scope>test</scope>
         </dependency>
 
-        <!-- https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-starter-data-redis -->
         <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-data-redis</artifactId>
-            <version>4.0.0</version>
+            <groupId>org.springframework.ai</groupId>
+            <artifactId>spring-ai-starter-model-ollama</artifactId>
         </dependency>
-
 
     </dependencies>
 
@@ -123,7 +117,17 @@
                 <type>pom</type>
                 <scope>import</scope>
             </dependency>
+
+                <dependency>
+                    <groupId>com.google.genai</groupId>
+                    <artifactId>google-genai</artifactId>
+                    <version>1.0.0</version>
+                </dependency>
+
         </dependencies>
+
+
+
     </dependencyManagement>
 
     <build>
