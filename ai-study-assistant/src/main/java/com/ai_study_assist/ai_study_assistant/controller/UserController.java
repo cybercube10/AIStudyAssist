@@ -5,8 +5,11 @@ import com.ai_study_assist.ai_study_assistant.response.LoginRequest;
 import com.ai_study_assist.ai_study_assistant.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.Map;
 
 @RestController
 @RequestMapping("/api")
@@ -18,13 +21,16 @@ public class UserController {
     private BCryptPasswordEncoder encoder = new BCryptPasswordEncoder(12);
 
     @PostMapping("/register")
-    public User addUser(@RequestBody User user){
-        System.out.println(user.getUsername());
-        System.out.println(user.getEmail());
-        System.out.println(user.getPassword());
+    public ResponseEntity<?> addUser(@RequestBody User user){
+
         user.setPassword(encoder.encode(user.getPassword()));
-       return userService.addUser(user);
-       
+        try {
+            User saved = userService.addUser(user);
+            return ResponseEntity.ok(saved);
+        } catch (RuntimeException ex) {
+            return ResponseEntity.badRequest().body(Map.of("error", ex.getMessage()));
+
+        }
     }
 
     @PostMapping("/login")

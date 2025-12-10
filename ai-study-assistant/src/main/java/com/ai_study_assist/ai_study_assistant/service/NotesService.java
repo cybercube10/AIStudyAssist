@@ -26,11 +26,18 @@ public class NotesService {
 
 
     public Notes addNotes(Long userId, Notes note){
-        User user = userRepository.findById(userId)
-                .orElseThrow(() -> new RuntimeException("User not found"));
 
-        note.setUser(user);
-        return notesRepository.save(note);
+            User user = userRepository.findById(userId)
+                    .orElseThrow(() -> new RuntimeException("User not found"));
+
+        try{note.setUser(user);
+            return notesRepository.save(note);
+        }
+        catch(Exception e){
+
+            e.printStackTrace();
+            return null;
+        }
     }
 
 
@@ -57,4 +64,6 @@ public class NotesService {
         return notesRepository.findById(noteId)
                 .orElseThrow(() -> new RuntimeException("Note not found"));
     }
+
+
 }

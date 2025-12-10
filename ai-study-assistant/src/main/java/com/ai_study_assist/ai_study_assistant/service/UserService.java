@@ -24,14 +24,14 @@ public class UserService {
    JWTService jwtService;
 
     public User addUser(User user){
-        try{
-            return userRepository.save(user);
-        }
-        catch (Exception e){
-            System.out.println(e.getMessage());
-            return null;
-        }
+    if(userRepository.findByUsername(user.getUsername())!=null){
+        throw new RuntimeException("User with this username already exists");
+    }
+    if(userRepository.findByEmail(user.getEmail())!=null){
+        throw new RuntimeException("User with this email already exists");
+    }
 
+            return userRepository.save(user);
     }
 
         public String loginUser(LoginRequest user){

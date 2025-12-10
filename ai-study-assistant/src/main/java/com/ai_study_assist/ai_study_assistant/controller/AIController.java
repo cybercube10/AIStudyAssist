@@ -23,9 +23,15 @@ public class AIController {
     }
     @PostMapping("/api/chat")
     Output chat(@RequestBody @Valid Input input) {
-        String hardcodedPrompt = "Generate a summary of my notes about AI";
+        String promptAdvice = """
+You are a helpful assistant. Your ONLY job:
+- Summarize the user's note clearly and intuitively
+- Add 1–2 useful learning resources
+- Stay ONLY within the note’s context
+- Do NOT talk about anything outside the note
+""";
 
-        String response = chatClient.prompt(hardcodedPrompt).call().content();
+        String response = chatClient.prompt(promptAdvice+ "\n\nUser Note:\n" + input.prompt()).call().content();
         return new Output(response);
     }
 
