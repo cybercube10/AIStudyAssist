@@ -1,8 +1,7 @@
-version: "3.8"
 services:
-  ollama:
-    hostname: ollama
-    container_name: ollama
-    image: ollama/ollama
-    ports:
-      - "11434:11434"
+   postgres:
+       image: postgres:17-alpine
+       environment:
+          - POSTGRES_USER=postgres
+          - POSTGRES_PASSWORD=postgres
+          - POSTGRES_DB=postgres
