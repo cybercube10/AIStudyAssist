@@ -4,8 +4,10 @@ import com.ai_study_assist.ai_study_assistant.entity.Notes;
 import com.ai_study_assist.ai_study_assistant.entity.User;
 import com.ai_study_assist.ai_study_assistant.repository.NotesRepository;
 import com.ai_study_assist.ai_study_assistant.repository.UserRepository;
+import com.ai_study_assist.ai_study_assistant.response.NotesSummaryResponse;
 import com.ai_study_assist.ai_study_assistant.service.NotesService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -63,6 +65,16 @@ public class NotesController {
         Long defaultUserId =  getCurrentUserId();
 
         return notesService.findAllNotes(defaultUserId);
+    }
+
+
+    @PostMapping("/summary/{notesId}")
+    public ResponseEntity<NotesSummaryResponse> generateSummary
+            (@PathVariable Long notesId){
+        Long userId =  getCurrentUserId();
+        NotesSummaryResponse notesSummaryResponse = notesService.generateSummary(notesId,userId);
+        return ResponseEntity.ok(notesSummaryResponse);
+
     }
 
 }

@@ -55,20 +55,7 @@ You are a helpful assistant. Your ONLY job:
     record Input(String prompt) {}
     record Output(String content) {}
 
-//@Autowired
 
-
-//    @GetMapping("ask")
-//    public String generateSummary(Notes notes) {
-////        try {
-////            return aiService.performTask("generate summary of my notes");
-////        } catch (Exception ex) {
-////            ex.printStackTrace();
-////            return "Error occurred: " + ex.getMessage();
-////        }
-//
-//
-//    }
 
 
 }
