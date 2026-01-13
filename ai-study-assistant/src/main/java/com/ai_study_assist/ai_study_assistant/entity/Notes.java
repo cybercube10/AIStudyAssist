@@ -27,12 +27,15 @@ public class Notes {
 
     private String title;
 
+    @Column(columnDefinition = "TEXT")
     private String content;
 
     @CreatedDate
+    @Column(nullable = false)
     private LocalDateTime created;
 
     @LastModifiedDate
+    @Column(nullable = false)
     private LocalDateTime updated;
 
     @ManyToOne

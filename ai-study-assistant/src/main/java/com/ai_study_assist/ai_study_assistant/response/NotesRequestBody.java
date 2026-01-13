@@ -10,7 +10,7 @@ import lombok.Setter;
 @NoArgsConstructor
 @AllArgsConstructor
 public class NotesRequestBody {
-    private final Long id = 1L;
+    private Long id;
     private String title;
     private String content;
 }

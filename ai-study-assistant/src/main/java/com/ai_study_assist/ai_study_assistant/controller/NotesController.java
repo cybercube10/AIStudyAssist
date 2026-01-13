@@ -2,11 +2,13 @@ package com.ai_study_assist.ai_study_assistant.controller;
 
 import com.ai_study_assist.ai_study_assistant.entity.Notes;
 import com.ai_study_assist.ai_study_assistant.entity.User;
+import com.ai_study_assist.ai_study_assistant.exceptions.ResourceNotFoundException;
 import com.ai_study_assist.ai_study_assistant.repository.NotesRepository;
 import com.ai_study_assist.ai_study_assistant.repository.UserRepository;
 import com.ai_study_assist.ai_study_assistant.response.NotesSummaryResponse;
 import com.ai_study_assist.ai_study_assistant.service.NotesService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -68,12 +70,23 @@ public class NotesController {
     }
 
 
-    @PostMapping("/summary/{notesId}")
+    @GetMapping("/summary/{notesId}")
     public ResponseEntity<NotesSummaryResponse> generateSummary
             (@PathVariable Long notesId){
         Long userId =  getCurrentUserId();
         NotesSummaryResponse notesSummaryResponse = notesService.generateSummary(notesId,userId);
-        return ResponseEntity.ok(notesSummaryResponse);
+
+        try {
+            NotesSummaryResponse response =
+                    notesService.generateSummary(notesId, userId);
+
+            return ResponseEntity.ok(response);
+
+        } catch (ResourceNotFoundException ex) {
+            return ResponseEntity
+                    .status(HttpStatus.NOT_FOUND)
+                    .body(null);
+        }
 
     }
 

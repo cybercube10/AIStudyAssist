@@ -13,19 +13,25 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.RestTemplate;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 
 @Service
 public class NotesService {
+
     @Autowired
     private NotesRepository notesRepository;
     @Autowired
     private UserRepository userRepository;
 
+
+    private final RestTemplate restTemplate;
+    @Autowired
+    public NotesService(RestTemplate restTemplate) {
+        this.restTemplate = restTemplate;
+    }
 
 
     public Notes addNotes(Long userId, Notes note){
@@ -70,9 +76,24 @@ public class NotesService {
 
 
     public NotesSummaryResponse generateSummary(Long notesId,Long userId) {
-        if(notesRepository.findByIdAndNotesId(userId,notesId)==null){
-            throw new ResourceNotFoundException("Note not found");
-        }
+        Notes note = notesRepository.findByIdAndUserId(notesId, userId).orElseThrow(() -> new ResourceNotFoundException("Note not found"));
+        Map<String,Object> requestBody = new HashMap<>();
+
+        requestBody.put("title", note.getTitle());
+        requestBody.put("content", note.getContent());
+        Map<String, Object> response = restTemplate.postForObject(
+                "http://127.0.0.1:5000/",
+                requestBody,
+                Map.class
+        );
+
+
+        return  NotesSummaryResponse.builder()
+               .notesId(notesId)
+               .userId(userId)
+               .noteTitle((String) response.get("title"))
+               .noteContent((String) response.get("summary"))
+               .practiceQuestions((List<String>) response.get("practice_questions")).build();
 
     }
 }
